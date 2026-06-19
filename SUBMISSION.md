@@ -14,15 +14,11 @@
 
 ## 项目链接
 
-发布到 GitHub Pages 后填写：
-
-`https://<github-username>.github.io/penalty-oracle/`
+`https://stansaber58-cmd.github.io/penalty-oracle/`
 
 ## GitHub 仓库
 
-发布到 GitHub 后填写：
-
-`https://github.com/<github-username>/penalty-oracle`
+`https://github.com/stansaber58-cmd/penalty-oracle`
 
 ## 项目说明
 
