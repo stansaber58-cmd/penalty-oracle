@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f3b29">
+  <meta name="description" content="点球宇宙 Penalty Oracle：一个世界杯点球心理剧本生成器，把一脚点球变成可分享的赛后小报。">
+  <meta property="og:title" content="点球宇宙 Penalty Oracle">
+  <meta property="og:description" content="调助跑、射门方向、压力和门将读心，生成你的世界杯点球小报。">
+  <title>点球宇宙 Penalty Oracle</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="stadium-glow" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="match-header">
+      <div class="brand-block">
+        <span class="eyebrow">WORLD CUP SIDE PROJECT</span>
+        <h1>点球宇宙</h1>
+        <p>把一脚点球，生成一份赛后小报。</p>
+      </div>
+      <div class="scorebug" aria-label="产品标识">
+        <span>PK</span>
+        <strong>90+∞</strong>
+        <em>Penalty Oracle</em>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="点球宇宙工作台">
+      <aside class="control-panel" aria-label="点球设置">
+        <div class="panel-head">
+          <span>01 / 设定剧本</span>
+          <strong>今晚你主罚</strong>
+        </div>
+
+        <section class="control-group">
+          <h2>球员人格</h2>
+          <div class="choice-grid" data-control="persona">
+            <button class="choice active" type="button" data-value="ice">冷面队长</button>
+            <button class="choice" type="button" data-value="poet">浪漫左脚</button>
+            <button class="choice" type="button" data-value="chaos">整活替补</button>
+            <button class="choice" type="button" data-value="rookie">初登大赛</button>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <h2>助跑方式</h2>
+          <div class="segmented" data-control="runup">
+            <button class="active" type="button" data-value="stutter">碎步停顿</button>
+            <button type="button" data-value="rocket">直线爆冲</button>
+            <button type="button" data-value="walk">散步骗术</button>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <h2>射门方向</h2>
+          <div class="target-pad" data-control="target">
+            <button type="button" data-value="left-high">左上</button>
+            <button type="button" data-value="center-high">中上</button>
+            <button type="button" data-value="right-high">右上</button>
+            <button type="button" data-value="left-low">左下</button>
+            <button class="active" type="button" data-value="center-low">中路</button>
+            <button type="button" data-value="right-low">右下</button>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <h2>门将读心</h2>
+          <div class="segmented keeper-read" data-control="keeper">
+            <button type="button" data-value="left">扑左</button>
+            <button class="active" type="button" data-value="hold">站住</button>
+            <button type="button" data-value="right">扑右</button>
+          </div>
+        </section>
+
+        <section class="control-group pressure-group">
+          <div class="range-label">
+            <h2>压力指数</h2>
+            <output id="pressure-output">68</output>
+          </div>
+          <input id="pressure" type="range" min="0" max="100" value="68">
+          <label class="toggle-row">
+            <input id="noise-toggle" type="checkbox" checked>
+            <span>全场嘘声已经拉满</span>
+          </label>
+        </section>
+
+        <div class="action-row">
+          <button class="btn primary" id="kick-button" type="button">开罚</button>
+          <button class="icon-btn" id="reset-button" type="button" aria-label="重置选择" title="重置选择">↺</button>
+        </div>
+      </aside>
+
+      <section class="play-panel" aria-label="点球演算">
+        <div class="pitch-wrap">
+          <div class="pitch" id="pitch" data-target="center-low" data-keeper="hold">
+            <div class="goal">
+              <span class="net-line"></span>
+              <span class="net-line"></span>
+              <span class="net-line"></span>
+              <span class="keeper" id="keeper-figure" aria-hidden="true"></span>
+            </div>
+            <div class="penalty-arc"></div>
+            <div class="spot"></div>
+            <div class="ball" id="ball" aria-hidden="true"></div>
+            <div class="lane lane-left"></div>
+            <div class="lane lane-center"></div>
+            <div class="lane lane-right"></div>
+          </div>
+        </div>
+
+        <article class="report-panel" aria-live="polite">
+          <div class="report-head">
+            <span id="result-tag">赛前预演</span>
+            <strong id="result-score">等待开罚</strong>
+          </div>
+          <h2 id="result-title">点球点前，宇宙正在读秒。</h2>
+          <p id="result-copy">选择你的射门剧本，点击开罚。系统会根据人格、助跑、压力和门将读心生成一份世界杯赛后小报。</p>
+
+          <div class="metric-grid" aria-label="预测指标">
+            <div>
+              <span>进球率</span>
+              <strong id="metric-goal">--%</strong>
+            </div>
+            <div>
+              <span>梗指数</span>
+              <strong id="metric-meme">--</strong>
+            </div>
+            <div>
+              <span>VAR戏份</span>
+              <strong id="metric-var">--</strong>
+            </div>
+          </div>
+
+          <ol class="timeline" id="timeline">
+            <li>镜头切到主罚者的鞋带。</li>
+            <li>门将开始做心理建设。</li>
+            <li>评论区已经准备好截图。</li>
+          </ol>
+
+          <div class="share-actions">
+            <button class="btn pale" id="copy-button" type="button">复制战报</button>
+            <button class="btn dark" id="download-button" type="button">下载小报</button>
+          </div>
+          <canvas id="poster-canvas" width="1200" height="1600" aria-hidden="true"></canvas>
+        </article>
+      </section>
+    </section>
+
+    <section class="history-section" aria-label="历史战报">
+      <div class="section-title">
+        <span>02 / 赛后档案</span>
+        <h2>最近三脚点球</h2>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
